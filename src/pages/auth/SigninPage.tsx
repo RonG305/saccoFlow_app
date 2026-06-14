@@ -28,6 +28,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getOrganizations } from "@/data/organization/organization";
 import { loginUser } from "@/actions/auth";
 import type { Organization } from "@/types/organization";
+import { Icon } from "@iconify/react";
+import { decodeToken } from "@/lib/decode-token";
+import type { UserData } from "@/lib/user";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -42,6 +45,11 @@ export default function SigninPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   useEffect(() => {
     getOrganizations({ limit: 20 }).then((res) => {
@@ -68,7 +76,9 @@ export default function SigninPage() {
         setError(result.error);
         return;
       }
-      navigate("/", { replace: true });
+      const decoded = decodeToken<UserData>(result.accessToken);
+      const destination = decoded?.roles?.includes("driver") ? "/courier/home" : "/home";
+      navigate(destination, { replace: true });
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -136,8 +146,30 @@ export default function SigninPage() {
                     </Link>
                   </div>
                   <FormControl>
-                    <Input type="password" placeholder="••••••••" {...field} />
+                    <div className="relative">
+                      <Input
+                        type={`${showPassword ? "text" : "password"}`}
+                        placeholder="••••••••"
+                        {...field}
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleShowPassword}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                      >
+                        <Icon
+                          icon={
+                            showPassword
+                              ? "solar:eye-closed-linear"
+                              : "solar:eye-linear"
+                          }
+                          fontSize={20}
+                        />
+                      </button>
+                    </div>
                   </FormControl>
+
                   <FormMessage />
                 </FormItem>
               )}

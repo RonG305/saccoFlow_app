@@ -1,19 +1,3 @@
-export function formatKES(value: string | number) {
-  const num = typeof value === 'string' ? parseFloat(value) : value
-  return `KES ${num.toLocaleString('en-KE', { minimumFractionDigits: 2 })}`
-}
-
-export function formatCardNumber(accountNumber: string | undefined) {
-  return accountNumber ? accountNumber.replace(/-/g, '  ') : '•••  ••••  •••••'
-}
-
-export function getHolderName(profile: { first_name?: string; last_name?: string } | null) {
-  return profile
-    ? [profile.first_name, profile.last_name].filter(Boolean).join(' ').toUpperCase()
-    : 'SHAREHOLDER'
-}
-
-
 export function formatDate(value?: string | null): string {
   if (!value) return '—'
   return new Date(value).toLocaleDateString('en-US', {

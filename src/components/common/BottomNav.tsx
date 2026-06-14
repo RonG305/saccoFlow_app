@@ -12,7 +12,7 @@ const tabs = [
 export function BottomNav() {
   const { pathname } = useLocation()
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-10 border-t bg-background">
+    <nav className="fixed inset-x-0 bottom-0 z-50 border-t bg-background">
       <div className="mx-auto flex max-w-3xl">
         {tabs.map(({ to, label, icon }) => {
           const active = pathname === to || pathname.startsWith(to + '/')

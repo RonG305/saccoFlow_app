@@ -1,13 +1,17 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import SplashPage from './pages/auth/SplashPage'
-import SignupPage from './pages/auth/SignupPage'
-import SigninPage from './pages/auth/SigninPage'
-import OtpPage from './pages/auth/OtpPage'
-import { MainLayout } from './components/common/MainLayout'
-import HomePage from './pages/main/HomePage'
-import SharesPage from './pages/main/SharesPage'
-import LoansPage from './pages/main/LoansPage'
-import AccountPage from './pages/main/AccountPage'
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import SplashPage from "./pages/auth/SplashPage";
+import SignupPage from "./pages/auth/SignupPage";
+import SigninPage from "./pages/auth/SigninPage";
+import OtpPage from "./pages/auth/OtpPage";
+import { MainLayout } from "./components/common/MainLayout";
+import { CourierLayout } from "./components/Courier/CourierLayout";
+import HomePage from "./pages/main/HomePage";
+import SharesPage from "./pages/main/SharesPage";
+import LoansPage from "./pages/main/LoansPage";
+import AccountPage from "./pages/main/AccountPage";
+import CourierHome from "./pages/courier/CourierHome";
+import CourierTrips from "./pages/courier/CourierTrips";
+import CourierAccount from "./pages/courier/CourierAccount";
 
 export default function App() {
   return (
@@ -19,6 +23,7 @@ export default function App() {
           <Route path="/signin" element={<SigninPage />} />
           <Route path="/otp" element={<OtpPage />} />
 
+          {/* Sacco member UI */}
           <Route element={<MainLayout />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/shares" element={<SharesPage />} />
@@ -26,9 +31,16 @@ export default function App() {
             <Route path="/account" element={<AccountPage />} />
           </Route>
 
+          {/* Driver / Courier UI */}
+          <Route element={<CourierLayout />}>
+            <Route path="/courier/home" element={<CourierHome />} />
+            <Route path="/courier/trips" element={<CourierTrips />} />
+            <Route path="/courier/account" element={<CourierAccount />} />
+          </Route>
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </BrowserRouter>
-  )
+  );
 }

@@ -1,0 +1,1507 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/logistics/vehicles": {
+      "post": {
+        "operationId": "VehicleController_createVehicle",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVehicleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Register a new vehicle",
+        "tags": [
+          "Vehicles"
+        ]
+      },
+      "get": {
+        "operationId": "VehicleController_listVehicles",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Fuzzy search across reg_number, make, model, fuel_type",
+            "schema": {
+              "example": "Toyota",
+              "type": "string"
+            }
+          },
+          {
+            "name": "organization_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "clorg123",
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "active",
+              "type": "string",
+              "enum": [
+                "active",
+                "maintenance",
+                "inactive",
+                "decommissioned"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "example": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "List vehicles with optional filters and pagination",
+        "tags": [
+          "Vehicles"
+        ]
+      }
+    },
+    "/api/v1/logistics/vehicles/alerts": {
+      "get": {
+        "operationId": "VehicleController_getVehicleExpiryAlerts",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Vehicles with license or service expiry within 30 days",
+        "tags": [
+          "Vehicles"
+        ]
+      }
+    },
+    "/api/v1/logistics/vehicles/{id}": {
+      "get": {
+        "operationId": "VehicleController_getVehicleById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Get a single vehicle with recent trips and maintenance",
+        "tags": [
+          "Vehicles"
+        ]
+      },
+      "patch": {
+        "operationId": "VehicleController_updateVehicle",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVehicleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Update vehicle details",
+        "tags": [
+          "Vehicles"
+        ]
+      }
+    },
+    "/api/v1/logistics/vehicles/{id}/maintenance": {
+      "post": {
+        "operationId": "VehicleController_recordVehicleMaintenance",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordMaintenanceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Record a maintenance event for a vehicle",
+        "tags": [
+          "Vehicles"
+        ]
+      }
+    },
+    "/api/v1/logistics/trips": {
+      "post": {
+        "operationId": "TripController_scheduleTrip",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScheduleTripDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Schedule a new trip",
+        "tags": [
+          "Trips"
+        ]
+      },
+      "get": {
+        "operationId": "TripController_listTrips",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Fuzzy search across trip_ref, origin, destination, purpose, cargo_description",
+            "schema": {
+              "example": "Mombasa",
+              "type": "string"
+            }
+          },
+          {
+            "name": "organization_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "clorg789",
+              "type": "string"
+            }
+          },
+          {
+            "name": "vehicle_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "clvehicle123",
+              "type": "string"
+            }
+          },
+          {
+            "name": "driver_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "cldriver456",
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "scheduled",
+              "type": "string",
+              "enum": [
+                "scheduled",
+                "in_progress",
+                "completed",
+                "cancelled"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "example": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "List trips with optional filters and pagination",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/v1/logistics/trips/{id}": {
+      "get": {
+        "operationId": "TripController_getTripById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Get a single trip with vehicle and incidents",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/v1/logistics/trips/{id}/status": {
+      "patch": {
+        "operationId": "TripController_updateTripStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTripStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Update trip status — in_progress sets actual_departure, completed sets actual_arrival",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/v1/logistics/trips/{id}/incidents": {
+      "post": {
+        "operationId": "TripController_reportTripIncident",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportIncidentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Report an incident that occurred during a trip",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/v1/logistics/trips/{id}/location": {
+      "post": {
+        "description": "Auto-starts a scheduled trip on first ping. Fires a geofence event when within the origin or destination radius. Auto-completes the trip when within the destination geofence. Broadcasts all events in real-time via WebSocket (/tracking namespace).",
+        "operationId": "TrackingController_pushLocation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Trip ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushLocationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Push a GPS coordinate for an active trip",
+        "tags": [
+          "Trip Tracking"
+        ]
+      }
+    },
+    "/api/v1/logistics/trips/{id}/location/history": {
+      "get": {
+        "operationId": "TrackingController_getLocationHistory",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Trip ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Get full GPS breadcrumb trail for a trip (chronological)",
+        "tags": [
+          "Trip Tracking"
+        ]
+      }
+    },
+    "/api/v1/logistics/trips/{id}/location/current": {
+      "get": {
+        "operationId": "TrackingController_getCurrentLocation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Trip ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Get the last known GPS position for a trip",
+        "tags": [
+          "Trip Tracking"
+        ]
+      }
+    },
+    "/api/v1/logistics/drivers/stats": {
+      "get": {
+        "operationId": "DriverController_listDriverStats",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "clorg789",
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 20,
+              "example": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "List all driver stats for an organisation",
+        "tags": [
+          "Driver Stats"
+        ]
+      }
+    },
+    "/api/v1/logistics/drivers/{driverId}/stats": {
+      "get": {
+        "operationId": "DriverController_getDriverStats",
+        "parameters": [
+          {
+            "name": "driverId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Aggregate stats for a single driver",
+        "tags": [
+          "Driver Stats"
+        ]
+      }
+    },
+    "/api/v1/logistics/drivers/{driverId}/stats/trips/daily": {
+      "get": {
+        "operationId": "DriverController_getDailyTrips",
+        "parameters": [
+          {
+            "name": "driverId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-06-14",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Daily trip count — last 30 days by default",
+        "tags": [
+          "Driver Stats"
+        ]
+      }
+    },
+    "/api/v1/logistics/drivers/{driverId}/stats/trips/weekly": {
+      "get": {
+        "operationId": "DriverController_getWeeklyTrips",
+        "parameters": [
+          {
+            "name": "driverId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-06-14",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Weekly trip count — last 12 weeks by default",
+        "tags": [
+          "Driver Stats"
+        ]
+      }
+    },
+    "/api/v1/logistics/drivers/{driverId}/stats/trips/monthly": {
+      "get": {
+        "operationId": "DriverController_getMonthlyTrips",
+        "parameters": [
+          {
+            "name": "driverId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-06-14",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Monthly trip count — last 12 months by default",
+        "tags": [
+          "Driver Stats"
+        ]
+      }
+    },
+    "/api/v1/logistics/drivers/{driverId}/stats/trips/yearly": {
+      "get": {
+        "operationId": "DriverController_getYearlyTrips",
+        "parameters": [
+          {
+            "name": "driverId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-06-14",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Yearly trip count — last 3 years by default",
+        "tags": [
+          "Driver Stats"
+        ]
+      }
+    },
+    "/api/v1/logistics/drivers/{driverId}/stats/fuel/daily": {
+      "get": {
+        "operationId": "DriverController_getDailyFuel",
+        "parameters": [
+          {
+            "name": "driverId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-06-14",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Daily fuel consumed (litres) — last 30 days by default",
+        "tags": [
+          "Driver Stats"
+        ]
+      }
+    },
+    "/api/v1/logistics/drivers/{driverId}/stats/fuel/weekly": {
+      "get": {
+        "operationId": "DriverController_getWeeklyFuel",
+        "parameters": [
+          {
+            "name": "driverId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-06-14",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Weekly fuel consumed (litres) — last 12 weeks by default",
+        "tags": [
+          "Driver Stats"
+        ]
+      }
+    },
+    "/api/v1/logistics/drivers/{driverId}/stats/fuel/monthly": {
+      "get": {
+        "operationId": "DriverController_getMonthlyFuel",
+        "parameters": [
+          {
+            "name": "driverId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-06-14",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Monthly fuel consumed (litres) — last 12 months by default",
+        "tags": [
+          "Driver Stats"
+        ]
+      }
+    },
+    "/api/v1/logistics/drivers/{driverId}/stats/fuel/yearly": {
+      "get": {
+        "operationId": "DriverController_getYearlyFuel",
+        "parameters": [
+          {
+            "name": "driverId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "2025-06-14",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "jwt-auth": []
+          }
+        ],
+        "summary": "Yearly fuel consumed (litres) — last 3 years by default",
+        "tags": [
+          "Driver Stats"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "ICMS Logistics Service",
+    "description": "Vehicle fleet, trips, maintenance and incident tracking",
+    "version": "1.0",
+    "contact": {
+
+    }
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "jwt-auth": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "CreateVehicleDto": {
+        "type": "object",
+        "properties": {
+          "reg_number": {
+            "type": "string",
+            "example": "KCA 123A",
+            "description": "Unique vehicle registration number"
+          },
+          "make": {
+            "type": "string",
+            "example": "Toyota",
+            "description": "Vehicle manufacturer / make"
+          },
+          "model": {
+            "type": "string",
+            "example": "Toyota RAV4",
+            "description": "Specific model name"
+          },
+          "year": {
+            "type": "number",
+            "minimum": 1900,
+            "example": 2024,
+            "description": "Year of manufacture"
+          },
+          "capacity_liters": {
+            "type": "number",
+            "minimum": 1,
+            "example": 60,
+            "description": "Fuel tank capacity in litres"
+          },
+          "fuel_type": {
+            "type": "string",
+            "example": "diesel",
+            "description": "Fuel type (defaults to diesel)"
+          },
+          "driver_id": {
+            "type": "string",
+            "example": "cldriver456",
+            "description": "ID of the assigned driver"
+          },
+          "organization_id": {
+            "type": "string",
+            "example": "clorg123",
+            "description": "ID of the owning organization"
+          },
+          "license_expiry": {
+            "type": "string",
+            "example": "2026-12-31T00:00:00Z",
+            "description": "Vehicle licence expiry date"
+          },
+          "insurance_expiry": {
+            "type": "string",
+            "example": "2026-06-30T00:00:00Z",
+            "description": "Insurance policy expiry date"
+          },
+          "next_service_date": {
+            "type": "string",
+            "example": "2025-09-01T00:00:00Z",
+            "description": "Next scheduled service date"
+          },
+          "next_service_km": {
+            "type": "number",
+            "minimum": 0,
+            "example": 15000,
+            "description": "Mileage at which next service is due (km)"
+          },
+          "current_mileage": {
+            "type": "number",
+            "minimum": 0,
+            "example": 12400,
+            "description": "Current odometer reading (km)"
+          }
+        },
+        "required": [
+          "reg_number",
+          "make",
+          "model",
+          "year",
+          "capacity_liters",
+          "organization_id",
+          "license_expiry"
+        ]
+      },
+      "UpdateVehicleDto": {
+        "type": "object",
+        "properties": {
+          "reg_number": {
+            "type": "string",
+            "example": "KCA 123A",
+            "description": "Unique vehicle registration number"
+          },
+          "make": {
+            "type": "string",
+            "example": "Toyota",
+            "description": "Vehicle manufacturer / make"
+          },
+          "model": {
+            "type": "string",
+            "example": "Toyota RAV4",
+            "description": "Specific model name"
+          },
+          "year": {
+            "type": "number",
+            "minimum": 1900,
+            "example": 2024,
+            "description": "Year of manufacture"
+          },
+          "capacity_liters": {
+            "type": "number",
+            "minimum": 1,
+            "example": 60,
+            "description": "Fuel tank capacity in litres"
+          },
+          "fuel_type": {
+            "type": "string",
+            "example": "diesel",
+            "description": "Fuel type (defaults to diesel)"
+          },
+          "driver_id": {
+            "type": "string",
+            "example": "cldriver456",
+            "description": "ID of the assigned driver"
+          },
+          "organization_id": {
+            "type": "string",
+            "example": "clorg123",
+            "description": "ID of the owning organization"
+          },
+          "license_expiry": {
+            "type": "string",
+            "example": "2026-12-31T00:00:00Z",
+            "description": "Vehicle licence expiry date"
+          },
+          "insurance_expiry": {
+            "type": "string",
+            "example": "2026-06-30T00:00:00Z",
+            "description": "Insurance policy expiry date"
+          },
+          "next_service_date": {
+            "type": "string",
+            "example": "2025-09-01T00:00:00Z",
+            "description": "Next scheduled service date"
+          },
+          "next_service_km": {
+            "type": "number",
+            "minimum": 0,
+            "example": 15000,
+            "description": "Mileage at which next service is due (km)"
+          },
+          "current_mileage": {
+            "type": "number",
+            "minimum": 0,
+            "example": 12400,
+            "description": "Current odometer reading (km)"
+          }
+        }
+      },
+      "RecordMaintenanceDto": {
+        "type": "object",
+        "properties": {
+          "maintenance_type": {
+            "enum": [
+              "scheduled",
+              "emergency",
+              "inspection"
+            ],
+            "type": "string",
+            "example": "scheduled"
+          },
+          "description": {
+            "type": "string",
+            "example": "Oil change and filter replacement"
+          },
+          "cost": {
+            "type": "number",
+            "minimum": 1,
+            "example": 4500,
+            "description": "Service cost in KES"
+          },
+          "mileage_at_service": {
+            "type": "number",
+            "minimum": 0,
+            "example": 12400,
+            "description": "Odometer reading at time of service (km)"
+          },
+          "service_date": {
+            "type": "string",
+            "example": "2025-06-01T00:00:00Z"
+          },
+          "next_service_date": {
+            "type": "string",
+            "example": "2025-12-01T00:00:00Z"
+          },
+          "performed_by": {
+            "type": "string",
+            "example": "John Mechanic"
+          },
+          "garage": {
+            "type": "string",
+            "example": "City Motors Garage"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Replaced brake pads as well"
+          }
+        },
+        "required": [
+          "maintenance_type",
+          "description",
+          "cost",
+          "mileage_at_service",
+          "service_date"
+        ]
+      },
+      "ScheduleTripDto": {
+        "type": "object",
+        "properties": {
+          "vehicle_id": {
+            "type": "string",
+            "example": "clvehicle123",
+            "description": "ID of the vehicle assigned to this trip"
+          },
+          "driver_id": {
+            "type": "string",
+            "example": "cldriver456",
+            "description": "ID of the driver assigned to this trip"
+          },
+          "organization_id": {
+            "type": "string",
+            "example": "clorg789"
+          },
+          "origin": {
+            "type": "string",
+            "example": "Nairobi Dairy Farm",
+            "description": "Trip origin location"
+          },
+          "destination": {
+            "type": "string",
+            "example": "Mombasa Processing Plant",
+            "description": "Trip destination location"
+          },
+          "purpose": {
+            "type": "string",
+            "example": "Milk delivery",
+            "description": "Purpose of the trip"
+          },
+          "planned_departure": {
+            "type": "string",
+            "example": "2025-06-05T06:00:00Z",
+            "description": "Planned departure datetime"
+          },
+          "planned_arrival": {
+            "type": "string",
+            "example": "2025-06-05T14:00:00Z",
+            "description": "Planned arrival datetime"
+          },
+          "distance_km": {
+            "type": "number",
+            "minimum": 1,
+            "example": 480,
+            "description": "Expected distance in kilometres"
+          },
+          "cargo_description": {
+            "type": "string",
+            "example": "500 litres of raw milk in sealed cans"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Driver to call on arrival"
+          },
+          "origin_lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "example": -1.2921,
+            "description": "Latitude of the pickup/origin point"
+          },
+          "origin_lng": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "example": 36.8219,
+            "description": "Longitude of the pickup/origin point"
+          },
+          "destination_lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "example": -4.0435,
+            "description": "Latitude of the dropoff/destination point"
+          },
+          "destination_lng": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "example": 39.6682,
+            "description": "Longitude of the dropoff/destination point"
+          },
+          "geofence_radius_m": {
+            "type": "number",
+            "minimum": 50,
+            "maximum": 1000,
+            "example": 200,
+            "description": "Geofence radius in metres for auto pickup/dropoff detection (default 200)"
+          }
+        },
+        "required": [
+          "vehicle_id",
+          "driver_id",
+          "organization_id",
+          "origin",
+          "destination",
+          "planned_departure"
+        ]
+      },
+      "UpdateTripStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "enum": [
+              "scheduled",
+              "in_progress",
+              "completed",
+              "cancelled"
+            ],
+            "type": "string",
+            "example": "in_progress"
+          },
+          "distance_km": {
+            "type": "number",
+            "minimum": 1,
+            "example": 487.5,
+            "description": "Actual distance covered (km) — supply on completion"
+          },
+          "fuel_used_liters": {
+            "type": "number",
+            "minimum": 1,
+            "example": 42.3,
+            "description": "Fuel consumed (litres) — supply on completion"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Arrived 30 min early"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "ReportIncidentDto": {
+        "type": "object",
+        "properties": {
+          "incident_type": {
+            "enum": [
+              "breakdown",
+              "accident",
+              "off_route",
+              "delay",
+              "fuel_issue",
+              "other"
+            ],
+            "type": "string",
+            "example": "breakdown"
+          },
+          "description": {
+            "type": "string",
+            "example": "Right rear tyre burst on Mombasa road"
+          },
+          "occurred_at": {
+            "type": "string",
+            "example": "2025-06-05T09:30:00Z",
+            "description": "When the incident occurred"
+          },
+          "location": {
+            "type": "string",
+            "example": "Mombasa road near Athi River"
+          },
+          "latitude": {
+            "type": "number",
+            "example": -1.4563,
+            "description": "GPS latitude at incident location"
+          },
+          "longitude": {
+            "type": "number",
+            "example": 36.9789,
+            "description": "GPS longitude at incident location"
+          },
+          "resolved_at": {
+            "type": "string",
+            "example": "2025-06-05T11:00:00Z",
+            "description": "When the incident was resolved"
+          },
+          "reported_by": {
+            "type": "string",
+            "example": "cldriver456",
+            "description": "ID or name of who reported the incident"
+          }
+        },
+        "required": [
+          "incident_type",
+          "description",
+          "occurred_at",
+          "reported_by"
+        ]
+      },
+      "PushLocationDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "example": -1.2921,
+            "description": "Latitude of the driver (-90 to 90)"
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "example": 36.8219,
+            "description": "Longitude of the driver (-180 to 180)"
+          },
+          "speed_kmh": {
+            "type": "number",
+            "minimum": 1,
+            "example": 60.5,
+            "description": "Speed in km/h"
+          },
+          "heading": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 360,
+            "example": 270,
+            "description": "Compass heading in degrees (0–360)"
+          },
+          "accuracy_m": {
+            "type": "number",
+            "minimum": 1,
+            "example": 5,
+            "description": "GPS accuracy in metres"
+          },
+          "recorded_at": {
+            "type": "string",
+            "example": "2025-06-05T08:30:00Z",
+            "description": "When this reading was taken on the device (defaults to server time)"
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      }
+    }
+  }
+}

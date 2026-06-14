@@ -8,7 +8,8 @@ import TripDetailsDrawer from "@/components/Courier/Trips/TripDetailsDrawer";
 import ScheduleTripDrawer from "@/components/Courier/Trips/ScheduleTripDrawer";
 import UpdateStatusDrawer from "@/components/Courier/Trips/UpdateStatusDrawer";
 import ReportIncidentDrawer from "@/components/Courier/Trips/ReportIncidentDrawer";
-import { getDriverStats, getTrips } from "@/api/logistics";
+import PushLocationDrawer from "@/components/Courier/Trips/PushLocationDrawer";
+import { getDriverStats, getTrips } from "@/data/couriers/logistics";
 import { getUser } from "@/lib/user";
 import type { Trip, DriverStats } from "@/types/logistics";
 
@@ -20,6 +21,7 @@ export default function CourierHome() {
   const [viewTrip, setViewTrip] = useState<Trip | null>(null);
   const [updateTrip, setUpdateTrip] = useState<Trip | null>(null);
   const [incidentTrip, setIncidentTrip] = useState<Trip | null>(null);
+  const [locationTrip, setLocationTrip] = useState<Trip | null>(null);
   const [showSchedule, setShowSchedule] = useState(false);
 
   const fetchData = useCallback(async () => {
@@ -34,7 +36,9 @@ export default function CourierHome() {
     setRecentTrips(recentRes?.data ?? []);
   }, [user?.sub]);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div className="flex flex-col gap-4 pt-4">
@@ -83,23 +87,39 @@ export default function CourierHome() {
         onClose={() => setViewTrip(null)}
         onUpdateStatus={(t) => { setViewTrip(null); setUpdateTrip(t); }}
         onReportIncident={(t) => { setViewTrip(null); setIncidentTrip(t); }}
+        onPushLocation={(t) => { setViewTrip(null); setLocationTrip(t); }}
+      />
+      <PushLocationDrawer
+        trip={locationTrip}
+        open={!!locationTrip}
+        onClose={() => setLocationTrip(null)}
+        onSuccess={() => { setLocationTrip(null); fetchData(); }}
       />
       <UpdateStatusDrawer
         trip={updateTrip}
         open={!!updateTrip}
         onClose={() => setUpdateTrip(null)}
-        onSuccess={() => { setUpdateTrip(null); fetchData(); }}
+        onSuccess={() => {
+          setUpdateTrip(null);
+          fetchData();
+        }}
       />
       <ReportIncidentDrawer
         trip={incidentTrip}
         open={!!incidentTrip}
         onClose={() => setIncidentTrip(null)}
-        onSuccess={() => { setIncidentTrip(null); fetchData(); }}
+        onSuccess={() => {
+          setIncidentTrip(null);
+          fetchData();
+        }}
       />
       <ScheduleTripDrawer
         open={showSchedule}
         onClose={() => setShowSchedule(false)}
-        onSuccess={() => { setShowSchedule(false); fetchData(); }}
+        onSuccess={() => {
+          setShowSchedule(false);
+          fetchData();
+        }}
       />
     </div>
   );

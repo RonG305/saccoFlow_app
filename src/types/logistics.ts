@@ -11,6 +11,11 @@ export interface Trip {
   organization_id: string;
   origin: string;
   destination: string;
+  origin_lat?: number | string;
+  origin_lng?: number | string;
+  destination_lat?: number | string;
+  destination_lng?: number | string;
+  geofence_radius_m?: number;
   purpose?: string;
   status: TripStatus;
   planned_departure: string;
@@ -25,6 +30,24 @@ export interface Trip {
   updated_at: string;
   vehicle?: Vehicle;
   incidents?: TripIncident[];
+}
+
+export interface TripLocation {
+  latitude: number | string;
+  longitude: number | string;
+  speed_kmh?: number;
+  heading?: number;
+  accuracy_m?: number;
+  recorded_at?: string;
+}
+
+export interface PushLocationInput {
+  latitude: number;
+  longitude: number;
+  speed_kmh?: number;
+  heading?: number;
+  accuracy_m?: number;
+  recorded_at?: string;
 }
 
 export interface Vehicle {
@@ -95,6 +118,11 @@ export interface ScheduleTripInput {
   organization_id: string;
   origin: string;
   destination: string;
+  origin_lat?: number;
+  origin_lng?: number;
+  destination_lat?: number;
+  destination_lng?: number;
+  geofence_radius_m?: number;
   purpose?: string;
   planned_departure: string;
   planned_arrival?: string;

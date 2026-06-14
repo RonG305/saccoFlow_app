@@ -35,7 +35,7 @@ export default function TripsTable({
         const trip = row.original;
         return (
           <div className="min-w-0">
-            <p className="text-sm font-medium text-secondary">
+            <p className="text-xs font-medium text-secondary">
               {trip.trip_ref}
             </p>
           </div>
@@ -51,7 +51,7 @@ export default function TripsTable({
       accessorKey: "planned_departure",
       header: "Departure",
       cell: ({ row }) => (
-        <span className="text-sm text-muted-foreground whitespace-nowrap">
+        <span className="text-xs text-muted-foreground whitespace-nowrap">
           {format(new Date(row.original.planned_departure), "MMM d, h:mm a")}
         </span>
       ),
@@ -60,7 +60,7 @@ export default function TripsTable({
       id: "vehicle",
       header: "Vehicle",
       cell: ({ row }) => (
-        <span className="text-sm text-muted-foreground">
+        <span className="text-xs text-muted-foreground">
           {row.original.vehicle?.reg_number ?? "—"}
         </span>
       ),

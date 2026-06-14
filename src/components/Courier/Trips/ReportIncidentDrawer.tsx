@@ -10,9 +10,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
 import { Loader2 } from "lucide-react";
-import { reportIncident } from "@/api/logistics";
+import { reportIncident } from "@/data/couriers/logistics";
 import { getUser } from "@/lib/user";
 import type { Trip, IncidentType } from "@/types/logistics";
 import DrawerField from "./DrawerField";
@@ -33,13 +36,18 @@ const INCIDENT_TYPES: { value: IncidentType; label: string }[] = [
   { value: "other", label: "Other" },
 ];
 
-export default function ReportIncidentDrawer({ trip, open, onClose, onSuccess }: Props) {
+export default function ReportIncidentDrawer({
+  trip,
+  open,
+  onClose,
+  onSuccess,
+}: Props) {
   const user = getUser();
   const [incidentType, setIncidentType] = useState<IncidentType>("other");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
-  const [occurredAt, setOccurredAt] = useState(
-    () => new Date().toISOString().slice(0, 16)
+  const [occurredAt, setOccurredAt] = useState(() =>
+    new Date().toISOString().slice(0, 16),
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +80,11 @@ export default function ReportIncidentDrawer({ trip, open, onClose, onSuccess }:
   };
 
   return (
-    <Drawer open={open} onOpenChange={(v) => !v && onClose()} direction="bottom">
+    <Drawer
+      open={open}
+      onOpenChange={(v) => !v && onClose()}
+      direction="bottom"
+    >
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Report Incident</DrawerTitle>
@@ -131,7 +143,9 @@ export default function ReportIncidentDrawer({ trip, open, onClose, onSuccess }:
             Submit Report
           </Button>
           <DrawerClose asChild>
-            <Button variant="outline" onClick={onClose}>Cancel</Button>
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

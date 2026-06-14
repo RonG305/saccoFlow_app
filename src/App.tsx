@@ -11,6 +11,7 @@ import LoansPage from "./pages/main/LoansPage";
 import AccountPage from "./pages/main/AccountPage";
 import CourierHome from "./pages/courier/CourierHome";
 import CourierTrips from "./pages/courier/CourierTrips";
+import CourierMap from "./pages/courier/CourierMap";
 import CourierAccount from "./pages/courier/CourierAccount";
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
           <Route element={<CourierLayout />}>
             <Route path="/courier/home" element={<CourierHome />} />
             <Route path="/courier/trips" element={<CourierTrips />} />
+            <Route path="/courier/map" element={<CourierMap />} />
             <Route path="/courier/account" element={<CourierAccount />} />
           </Route>
 

@@ -10,9 +10,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
 import { Loader2 } from "lucide-react";
-import { updateTripStatus } from "@/api/logistics";
+import { updateTripStatus } from "@/data/couriers/logistics";
 import type { Trip, TripStatus } from "@/types/logistics";
 import DrawerField from "./DrawerField";
 
@@ -30,7 +33,12 @@ const STATUS_OPTIONS: { value: TripStatus; label: string }[] = [
   { value: "cancelled", label: "Cancelled" },
 ];
 
-export default function UpdateStatusDrawer({ trip, open, onClose, onSuccess }: Props) {
+export default function UpdateStatusDrawer({
+  trip,
+  open,
+  onClose,
+  onSuccess,
+}: Props) {
   const [status, setStatus] = useState<TripStatus>("in_progress");
   const [distanceKm, setDistanceKm] = useState("");
   const [fuelUsed, setFuelUsed] = useState("");
@@ -47,8 +55,10 @@ export default function UpdateStatusDrawer({ trip, open, onClose, onSuccess }: P
     try {
       const result = await updateTripStatus(trip.id, {
         status,
-        distance_km: isCompletion && distanceKm ? Number(distanceKm) : undefined,
-        fuel_used_liters: isCompletion && fuelUsed ? Number(fuelUsed) : undefined,
+        distance_km:
+          isCompletion && distanceKm ? Number(distanceKm) : undefined,
+        fuel_used_liters:
+          isCompletion && fuelUsed ? Number(fuelUsed) : undefined,
         notes: notes || undefined,
       });
       if (result?.error) {
@@ -67,7 +77,11 @@ export default function UpdateStatusDrawer({ trip, open, onClose, onSuccess }: P
   };
 
   return (
-    <Drawer open={open} onOpenChange={(v) => !v && onClose()} direction="bottom">
+    <Drawer
+      open={open}
+      onOpenChange={(v) => !v && onClose()}
+      direction="bottom"
+    >
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Update Trip Status</DrawerTitle>
@@ -126,7 +140,9 @@ export default function UpdateStatusDrawer({ trip, open, onClose, onSuccess }: P
             Update Status
           </Button>
           <DrawerClose asChild>
-            <Button variant="outline" onClick={onClose}>Cancel</Button>
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

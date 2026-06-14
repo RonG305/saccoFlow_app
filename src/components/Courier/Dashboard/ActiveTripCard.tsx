@@ -27,7 +27,7 @@ export default function ActiveTripCard({ trip, onUpdateStatus, onReportIncident 
         {trip.purpose && (
           <p className="text-xs text-background/60">{trip.purpose}</p>
         )}
-        <Progress value={40} className="mt-2 h-1.5 bg-background/20" />
+        <Progress value={60} className="mt-2 h-1.5 bg-background/20" />
       </div>
 
       {(trip.planned_departure || trip.planned_arrival) && (

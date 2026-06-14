@@ -6,7 +6,8 @@ import TripDetailsDrawer from "@/components/Courier/Trips/TripDetailsDrawer";
 import ScheduleTripDrawer from "@/components/Courier/Trips/ScheduleTripDrawer";
 import UpdateStatusDrawer from "@/components/Courier/Trips/UpdateStatusDrawer";
 import ReportIncidentDrawer from "@/components/Courier/Trips/ReportIncidentDrawer";
-import { getTrips } from "@/api/logistics";
+import PushLocationDrawer from "@/components/Courier/Trips/PushLocationDrawer";
+import { getTrips } from "@/data/couriers/logistics";
 import { getUser } from "@/lib/user";
 import type { Trip, TripStatus } from "@/types/logistics";
 
@@ -25,6 +26,7 @@ export default function CourierTrips() {
   const [viewTrip, setViewTrip] = useState<Trip | null>(null);
   const [updateTrip, setUpdateTrip] = useState<Trip | null>(null);
   const [incidentTrip, setIncidentTrip] = useState<Trip | null>(null);
+  const [locationTrip, setLocationTrip] = useState<Trip | null>(null);
   const [showSchedule, setShowSchedule] = useState(false);
 
   const fetchTrips = useCallback(async () => {
@@ -35,7 +37,9 @@ export default function CourierTrips() {
     setTrips(res?.data ?? []);
   }, [user?.sub, activeStatus]);
 
-  useEffect(() => { fetchTrips(); }, [fetchTrips]);
+  useEffect(() => {
+    fetchTrips();
+  }, [fetchTrips]);
 
   const toolbar = (
     <div className="flex items-center gap-2 overflow-x-scroll ">
@@ -77,23 +81,39 @@ export default function CourierTrips() {
         onClose={() => setViewTrip(null)}
         onUpdateStatus={(t) => { setViewTrip(null); setUpdateTrip(t); }}
         onReportIncident={(t) => { setViewTrip(null); setIncidentTrip(t); }}
+        onPushLocation={(t) => { setViewTrip(null); setLocationTrip(t); }}
+      />
+      <PushLocationDrawer
+        trip={locationTrip}
+        open={!!locationTrip}
+        onClose={() => setLocationTrip(null)}
+        onSuccess={() => { setLocationTrip(null); fetchTrips(); }}
       />
       <UpdateStatusDrawer
         trip={updateTrip}
         open={!!updateTrip}
         onClose={() => setUpdateTrip(null)}
-        onSuccess={() => { setUpdateTrip(null); fetchTrips(); }}
+        onSuccess={() => {
+          setUpdateTrip(null);
+          fetchTrips();
+        }}
       />
       <ReportIncidentDrawer
         trip={incidentTrip}
         open={!!incidentTrip}
         onClose={() => setIncidentTrip(null)}
-        onSuccess={() => { setIncidentTrip(null); fetchTrips(); }}
+        onSuccess={() => {
+          setIncidentTrip(null);
+          fetchTrips();
+        }}
       />
       <ScheduleTripDrawer
         open={showSchedule}
         onClose={() => setShowSchedule(false)}
-        onSuccess={() => { setShowSchedule(false); fetchTrips(); }}
+        onSuccess={() => {
+          setShowSchedule(false);
+          fetchTrips();
+        }}
       />
     </div>
   );

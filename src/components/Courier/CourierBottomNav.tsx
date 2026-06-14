@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 
 const tabs = [
   { to: "/courier/home", label: "Home", icon: "solar:home-2-linear" },
+  { to: "/courier/map", label: "Map", icon: "solar:map-point-wave-linear"},
   { to: "/courier/trips", label: "Deliveries", icon: "solar:delivery-linear" },
   { to: "/courier/account", label: "Account", icon: "solar:user-circle-linear" },
 ];

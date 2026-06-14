@@ -20,8 +20,8 @@ interface Props {
   onClose: () => void;
   onUpdateStatus: (trip: Trip) => void;
   onReportIncident: (trip: Trip) => void;
+  onPushLocation: (trip: Trip) => void;
 }
-
 
 export default function TripDetailsDrawer({
   trip,
@@ -29,6 +29,7 @@ export default function TripDetailsDrawer({
   onClose,
   onUpdateStatus,
   onReportIncident,
+  onPushLocation,
 }: Props) {
   if (!trip) return null;
   const canAct = trip.status !== "completed" && trip.status !== "cancelled";
@@ -134,20 +135,21 @@ export default function TripDetailsDrawer({
           {canAct && (
             <>
               <Button
-                onClick={() => {
-                  onClose();
-                  onUpdateStatus(trip);
-                }}
+                variant="outline"
+                onClick={() => { onClose(); onPushLocation(trip); }}
+              >
+                <Icon icon="solar:map-point-wave-bold" fontSize={16} />
+                Share Location
+              </Button>
+              <Button
+                onClick={() => { onClose(); onUpdateStatus(trip); }}
               >
                 <Icon icon="solar:refresh-circle-linear" fontSize={16} />
                 Update Status
               </Button>
               <Button
                 variant="destructive"
-                onClick={() => {
-                  onClose();
-                  onReportIncident(trip);
-                }}
+                onClick={() => { onClose(); onReportIncident(trip); }}
               >
                 <Icon icon="solar:danger-triangle-linear" fontSize={16} />
                 Report Incident

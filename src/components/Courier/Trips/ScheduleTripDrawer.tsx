@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
-import { scheduleTrip } from "@/api/logistics";
+import { scheduleTrip } from "@/data/couriers/logistics";
 import { getUser } from "@/lib/user";
 import DrawerField from "./DrawerField";
 

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { AppLogo } from './AppLogo'
+import { Card } from '../ui/card'
 
 interface AuthLayoutProps {
   title: string
@@ -10,7 +11,7 @@ interface AuthLayoutProps {
 
 export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col px-6">
+    <Card className="flex min-h-dvh relative bottom-0 flex-col px-6">
       <div className="flex justify-center pt-12 pb-8">
         <AppLogo />
       </div>
@@ -26,6 +27,6 @@ export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProp
           {footer}
         </div>
       )}
-    </div>
+    </Card>
   )
 }

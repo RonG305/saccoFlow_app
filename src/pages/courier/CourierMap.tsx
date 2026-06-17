@@ -4,6 +4,7 @@ import { getUser } from "@/lib/user";
 import TripTrackingMap from "@/components/common/Map/TripTrackingMap";
 import TripStatusBadge from "@/components/Courier/Trips/TripStatusBadge";
 import type { Trip } from "@/types/logistics";
+import { Icon } from "@iconify/react";
 
 export default function CourierMap() {
   const user = getUser();
@@ -63,7 +64,7 @@ export default function CourierMap() {
         <div className="flex items-center justify-between">
           <p className="text-sm">
             <span className="text-muted-foreground">{trip.origin}</span>
-            <span className="mx-1 text-muted-foreground">→</span>
+            <Icon icon={"solar:arrow-right-linear"}  fontSize={20}/>
             <span className="text-muted-foreground">{trip.destination}</span>
           </p>
           {distanceCovered > 0 && (

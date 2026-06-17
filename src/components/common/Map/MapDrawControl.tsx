@@ -27,7 +27,8 @@ const DrawControl = ({ onCreated }: { onCreated?: (coords: any) => void }) => {
         map.addControl(drawControl);
 
         // Listen for new shapes
-        map.on(L.Draw.Event.CREATED, (e: any) => {
+        const createdEvent = (L as any).Draw.Event.CREATED;
+        map.on(createdEvent, (e: any) => {
             const layer = e.layer;
             drawnItems.addLayer(layer);
 

@@ -9,6 +9,7 @@ import HomePage from "./pages/main/HomePage";
 import SharesPage from "./pages/main/SharesPage";
 import LoansPage from "./pages/main/LoansPage";
 import AccountPage from "./pages/main/AccountPage";
+import PrivacySecurityPage from "./pages/main/PrivacySecurityPage";
 import CourierHome from "./pages/courier/CourierHome";
 import CourierTrips from "./pages/courier/CourierTrips";
 import CourierMap from "./pages/courier/CourierMap";
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="/shares" element={<SharesPage />} />
             <Route path="/loans" element={<LoansPage />} />
             <Route path="/account" element={<AccountPage />} />
+            <Route path="/account/security" element={<PrivacySecurityPage />} />
           </Route>
 
           {/* Driver / Courier UI */}
@@ -37,7 +39,7 @@ export default function App() {
             <Route path="/courier/home" element={<CourierHome />} />
             <Route path="/courier/trips" element={<CourierTrips />} />
             <Route path="/courier/map" element={<CourierMap />} />
-            <Route path="/courier/account" element={<CourierAccount />} />
+            <Route path="/account/security" element={<PrivacySecurityPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

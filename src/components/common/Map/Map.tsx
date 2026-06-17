@@ -27,7 +27,7 @@ interface MapViewProps {
   };
 }
 
-const ChangeView = ({ center, zoom }: { center: [number, number]; zoom: number }) => {
+const ChangeView = ({ center }: { center: [number, number] }) => {
   const map = useMap();
   
 
@@ -100,7 +100,7 @@ const MapView = ({ latitude, longitude, title, zoom = 15, location, height='40vh
         scrollWheelZoom={true}
         style={{ minHeight: height, width: '100%' , borderRadius: '16px'}}
       >
-        <ChangeView center={position} zoom={zoom} />
+        <ChangeView center={position} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'

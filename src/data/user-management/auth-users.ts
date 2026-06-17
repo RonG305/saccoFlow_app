@@ -1,11 +1,12 @@
 import { BASE_URLS } from "@/api/base"
 import { makeApiRequest } from "@/api/main"
-import type { AuthUser, OrgUserStats } from "@/types/auth"
+import type { AuthUser, MemberProfile, OrgUserStats } from "@/types/auth"
 import { buildQuery } from "@/utils/buildQuery"
 
 type UserListParams = { page?: number; limit?: number; search?: string }
 
 const getBaseUrl = () => BASE_URLS.AUTH_URL
+const SERVICE_ERROR = 'Auth service not configured'
 const emptyList = (message: string) => ({ error: message, data: [] as AuthUser[], count: 0 })
 
 export const getUsers = async (params: UserListParams = {}) => {
@@ -67,4 +68,17 @@ export const getOrganizationUsers = async (params: UserListParams = {}) => {
         count: data.meta?.total ?? data.count ?? (Array.isArray(data) ? data.length : 0),
         data: (Array.isArray(data) ? data : data.data ?? []) as AuthUser[],
     }
+}
+
+export const getUserProfile = async (): Promise<MemberProfile | null> => {
+    if (!getBaseUrl()) return null
+
+    const response = await makeApiRequest(getBaseUrl(), `/profile`, {
+        method: 'GET',
+        withToken: true,
+    })
+
+    const data = await response?.json().catch(() => null)
+    if (!response?.ok) return null
+    return (data?.data ?? data) as MemberProfile
 }

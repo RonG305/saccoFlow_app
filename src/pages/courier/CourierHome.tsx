@@ -12,6 +12,8 @@ import PushLocationDrawer from "@/components/Courier/Trips/PushLocationDrawer";
 import { getDriverStats, getTrips } from "@/data/couriers/logistics";
 import { getUser } from "@/lib/user";
 import type { Trip, DriverStats } from "@/types/logistics";
+import DashboardStats from "@/components/Courier/Dashboard/StatsCard";
+import { Card } from "@/components/ui/card";
 
 export default function CourierHome() {
   const user = getUser();
@@ -66,7 +68,9 @@ export default function CourierHome() {
         </div>
       )}
 
-      <div className="flex flex-col gap-2">
+      <DashboardStats stats={stats} />
+
+      <Card className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold">Recent Trips</h2>
           <Link to="/courier/trips" className="text-xs text-primary">
@@ -79,7 +83,7 @@ export default function CourierHome() {
           onUpdateStatus={setUpdateTrip}
           onReportIncident={setIncidentTrip}
         />
-      </div>
+      </Card>
 
       <TripDetailsDrawer
         trip={viewTrip}

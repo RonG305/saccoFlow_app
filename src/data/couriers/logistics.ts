@@ -1,5 +1,6 @@
 import { BASE_URLS } from "../../api/base";
 import { makeApiRequest } from "../../api/main";
+import { getCurrentPosition } from "@/lib/geolocation";
 import type {
   ScheduleTripInput,
   UpdateTripStatusInput,
@@ -96,13 +97,7 @@ export const pushLocation = async (
   tripId: string,
   extras?: Omit<PushLocationInput, "latitude" | "longitude">,
 ) => {
-  const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
-    navigator.geolocation.getCurrentPosition(resolve, reject, {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0,
-    }),
-  );
+  const pos = await getCurrentPosition();
 
   const data: PushLocationInput = {
     latitude: pos.coords.latitude,

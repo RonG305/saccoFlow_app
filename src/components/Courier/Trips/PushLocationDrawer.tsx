@@ -41,9 +41,9 @@ export default function PushLocationDrawer({
       console.log("Push location error: ", err)
       if (err instanceof GeolocationPositionError) {
         const messages: Record<number, string> = {
-          1: "Location permission denied. Please allow location access and try again.",
-          2: "Unable to determine your location. Make sure GPS is enabled.",
-          3: "Location request timed out. Try again.",
+          1: "Location blocked. Open your browser's site settings and allow Location, then try again.",
+          2: "Could not get your position. Make sure GPS / Location Services is turned on.",
+          3: "Location timed out. Move to an open area and try again.",
         };
         setError(messages[err.code] ?? "Could not get your location.");
       } else {
@@ -76,7 +76,12 @@ export default function PushLocationDrawer({
           </p>
 
           {error && (
-            <p className="text-sm text-destructive">{error}</p>
+            <div className="rounded-lg bg-destructive/10 p-3 flex flex-col gap-1">
+              <p className="text-sm font-medium text-destructive">{error}</p>
+              <p className="text-xs text-muted-foreground">
+                Make sure you opened this app over <strong>https://</strong> — browsers block location on plain http.
+              </p>
+            </div>
           )}
         </div>
 

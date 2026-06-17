@@ -1,10 +1,10 @@
 import { Icon } from '@iconify/react'
 import type { ShareAccount } from '@/types/shares'
 import { formatKES, formatCardNumber, getHolderName } from '@/utils/format'
-import { getMemberProfile } from '@/utils/storage'
+import { getUserProfile } from '@/utils/storage'
 
 export function ShareCard({ account }: { account: ShareAccount | null }) {
-  const holderName = getHolderName(getMemberProfile())
+  const holderName = getHolderName(getUserProfile())
   const formattedNumber = formatCardNumber(account?.account_number)
 
   return (

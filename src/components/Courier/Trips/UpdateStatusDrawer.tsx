@@ -16,7 +16,8 @@ import {
 } from "@/components/ui/native-select";
 import { Loader2 } from "lucide-react";
 import { updateTripStatus } from "@/data/couriers/logistics";
-import type { Trip, TripStatus } from "@/types/logistics";
+import { getCurrentPosition } from "@/lib/geolocation";
+import type { Trip, TripStatus, UpdateTripStatusInput } from "@/types/logistics";
 import DrawerField from "./DrawerField";
 
 interface Props {
@@ -53,14 +54,29 @@ export default function UpdateStatusDrawer({
     setLoading(true);
     setError(null);
     try {
-      const result = await updateTripStatus(trip.id, {
+      const input: UpdateTripStatusInput = {
         status,
-        distance_km:
-          isCompletion && distanceKm ? Number(distanceKm) : undefined,
-        fuel_used_liters:
-          isCompletion && fuelUsed ? Number(fuelUsed) : undefined,
+        distance_km: isCompletion && distanceKm ? Number(distanceKm) : undefined,
+        fuel_used_liters: isCompletion && fuelUsed ? Number(fuelUsed) : undefined,
         notes: notes || undefined,
-      });
+      };
+
+      if (status === "in_progress" || status === "completed") {
+        try {
+          const pos = await getCurrentPosition();
+          if (status === "in_progress") {
+            input.origin_lat = pos.coords.latitude;
+            input.origin_lng = pos.coords.longitude;
+          } else {
+            input.destination_lat = pos.coords.latitude;
+            input.destination_lng = pos.coords.longitude;
+          }
+        } catch {
+          // GPS unavailable — proceed without coordinates
+        }
+      }
+
+      const result = await updateTripStatus(trip.id, input);
       if (result?.error) {
         setError(result?.message ?? "Failed to update status");
         return;

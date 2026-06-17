@@ -10,6 +10,7 @@ import PushLocationDrawer from "@/components/Courier/Trips/PushLocationDrawer";
 import { getTrips } from "@/data/couriers/logistics";
 import { getUser } from "@/lib/user";
 import type { Trip, TripStatus } from "@/types/logistics";
+import { Card } from "@/components/ui/card";
 
 const STATUS_TABS: { value: string; label: string }[] = [
   { value: "", label: "All" },
@@ -66,28 +67,41 @@ export default function CourierTrips() {
   return (
     <div className="flex flex-col gap-4 pt-4">
       <h1 className="text-xl font-bold">Deliveries</h1>
-
-      <TripsTable
-        trips={trips}
-        toolbar={toolbar}
-        onView={setViewTrip}
-        onUpdateStatus={setUpdateTrip}
-        onReportIncident={setIncidentTrip}
-      />
+      <Card>
+        <TripsTable
+          trips={trips}
+          toolbar={toolbar}
+          onView={setViewTrip}
+          onUpdateStatus={setUpdateTrip}
+          onReportIncident={setIncidentTrip}
+        />
+      </Card>
 
       <TripDetailsDrawer
         trip={viewTrip}
         open={!!viewTrip}
         onClose={() => setViewTrip(null)}
-        onUpdateStatus={(t) => { setViewTrip(null); setUpdateTrip(t); }}
-        onReportIncident={(t) => { setViewTrip(null); setIncidentTrip(t); }}
-        onPushLocation={(t) => { setViewTrip(null); setLocationTrip(t); }}
+        onUpdateStatus={(t) => {
+          setViewTrip(null);
+          setUpdateTrip(t);
+        }}
+        onReportIncident={(t) => {
+          setViewTrip(null);
+          setIncidentTrip(t);
+        }}
+        onPushLocation={(t) => {
+          setViewTrip(null);
+          setLocationTrip(t);
+        }}
       />
       <PushLocationDrawer
         trip={locationTrip}
         open={!!locationTrip}
         onClose={() => setLocationTrip(null)}
-        onSuccess={() => { setLocationTrip(null); fetchTrips(); }}
+        onSuccess={() => {
+          setLocationTrip(null);
+          fetchTrips();
+        }}
       />
       <UpdateStatusDrawer
         trip={updateTrip}

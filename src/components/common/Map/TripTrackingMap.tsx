@@ -56,7 +56,13 @@ const dot = (bg: string, size = 16) =>
 const ICON_ORIGIN = dot("#22c55e");
 const ICON_DEST = dot("#ef4444");
 const ICON_DRIVER = L.divIcon({
-  html: `<div style="width:22px;height:22px;border-radius:50%;background:#3b82f6;border:3px solid white;box-shadow:0 1px 8px rgba(59,130,246,.6);display:flex;align-items:center;justify-content:center"><div style="width:8px;height:8px;border-radius:50%;background:white"></div></div>`,
+  html: `
+    <div style="position:relative;width:22px;height:22px">
+      <div class="location-ping" style="position:absolute;inset:0;border-radius:50%;background:rgba(59,130,246,0.4)"></div>
+      <div style="position:relative;width:22px;height:22px;border-radius:50%;background:#3b82f6;border:3px solid white;box-shadow:0 1px 8px rgba(59,130,246,.6);display:flex;align-items:center;justify-content:center;z-index:1">
+        <div style="width:7px;height:7px;border-radius:50%;background:white"></div>
+      </div>
+    </div>`,
   className: "",
   iconSize: [22, 22],
   iconAnchor: [11, 11],
@@ -64,12 +70,23 @@ const ICON_DRIVER = L.divIcon({
 
 function BoundsUpdater({ points }: { points: [number, number][] }) {
   const map = useMap();
-  const key = points.map((p) => p.join(",")).join("|");
+  const fitted = useRef(false);
   useEffect(() => {
-    if (points.length > 1) map.fitBounds(points, { padding: [32, 32] });
-    else if (points.length === 1) map.setView(points[0], 14);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, map]);
+    if (fitted.current || points.length === 0) return;
+    if (points.length > 1) map.fitBounds(points, { padding: [40, 40] });
+    else map.setView(points[0], 16);
+    fitted.current = true;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [points.length, map]);
+  return null;
+}
+
+function DriverFocus({ pos }: { pos: [number, number] }) {
+  const map = useMap();
+  useEffect(() => {
+    map.flyTo(pos, 17, { duration: 1.2, easeLinearity: 0.25 });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pos[0], pos[1], map]);
   return null;
 }
 
@@ -87,8 +104,14 @@ interface Props {
   onDistanceUpdate?: (km: number) => void;
 }
 
-export default function TripTrackingMap({ trip, mapHeight = 220, showInfo = true, onDistanceUpdate }: Props) {
+export default function TripTrackingMap({
+  trip,
+  mapHeight = 220,
+  showInfo = true,
+  onDistanceUpdate,
+}: Props) {
   const [driverPos, setDriverPos] = useState<[number, number] | null>(null);
+  const [livePos, setLivePos] = useState<[number, number] | null>(null);
   const [trail, setTrail] = useState<[number, number][]>([]);
   const [distanceCovered, setDistanceCovered] = useState(0);
   const socketRef = useRef<Socket | null>(null);
@@ -98,9 +121,10 @@ export default function TripTrackingMap({ trip, mapHeight = 220, showInfo = true
     try {
       const history = await getLocationHistory(trip.id);
       if (Array.isArray(history) && history.length) {
-        const pts: [number, number][] = history.map(
-          (p: LocationPayload) => [Number(p.latitude), Number(p.longitude)],
-        );
+        const pts: [number, number][] = history.map((p: LocationPayload) => [
+          Number(p.latitude),
+          Number(p.longitude),
+        ]);
         const d = totalDistance(pts);
         setTrail(pts);
         setDistanceCovered(d);
@@ -129,9 +153,7 @@ export default function TripTrackingMap({ trip, mapHeight = 220, showInfo = true
     });
     socketRef.current = socket;
 
-    socket.on("connect", () =>
-      console.log("[tracking] connected:", socket.id),
-    );
+    socket.on("connect", () => console.log("[tracking] connected:", socket.id));
     socket.on("disconnect", (reason) =>
       console.log("[tracking] disconnected:", reason),
     );
@@ -150,6 +172,7 @@ export default function TripTrackingMap({ trip, mapHeight = 220, showInfo = true
         Number(payload.longitude),
       ];
       setDriverPos(pos);
+      setLivePos(pos);
       setTrail((prev) => {
         const next = [...prev, pos];
         const d = totalDistance(next);
@@ -185,8 +208,9 @@ export default function TripTrackingMap({ trip, mapHeight = 220, showInfo = true
       ? [Number(trip.destination_lat), Number(trip.destination_lng)]
       : null;
 
-  const defaultCenter: [number, number] =
-    originPos ?? destPos ?? driverPos ?? [-1.2921, 36.8219];
+  const defaultCenter: [number, number] = originPos ??
+    destPos ??
+    driverPos ?? [-1.2921, 36.8219];
 
   const boundPoints: [number, number][] = [
     ...(originPos ? [originPos] : []),
@@ -212,7 +236,7 @@ export default function TripTrackingMap({ trip, mapHeight = 220, showInfo = true
               />
               {trip.origin}
             </span>
-            <span>→</span>
+            <span> TO </span>
             <span className="flex items-center gap-1">
               <span
                 style={{
@@ -220,7 +244,7 @@ export default function TripTrackingMap({ trip, mapHeight = 220, showInfo = true
                   width: 8,
                   height: 8,
                   borderRadius: "50%",
-                  background: "#ef4444",
+                  background: "var(--color-muted-foreground)",
                 }}
               />
               {trip.destination}
@@ -234,7 +258,13 @@ export default function TripTrackingMap({ trip, mapHeight = 220, showInfo = true
         </div>
       )}
 
-      <div style={{ height: mapHeight, borderRadius: typeof mapHeight === "number" ? 12 : 8, overflow: "hidden" }}>
+      <div
+        style={{
+          height: mapHeight,
+          borderRadius: typeof mapHeight === "number" ? 12 : 8,
+          overflow: "hidden",
+        }}
+      >
         <MapContainer
           center={defaultCenter}
           zoom={30}
@@ -271,6 +301,7 @@ export default function TripTrackingMap({ trip, mapHeight = 220, showInfo = true
             </Marker>
           )}
           {boundPoints.length > 0 && <BoundsUpdater points={boundPoints} />}
+          {livePos && <DriverFocus pos={livePos} />}
         </MapContainer>
       </div>
     </div>

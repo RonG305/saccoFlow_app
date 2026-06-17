@@ -11,6 +11,10 @@ export interface AuthUser {
     status?: string
 }
 
+
+const getBaseUrl = () => BASE_URLS.AUTH_URL
+const SERVICE_ERROR = 'Auth service not configured'
+
 export const searchUsers = async (search: string): Promise<AuthUser[]> => {
     const baseUrl = BASE_URLS.AUTH_URL
     if (!baseUrl) return []
@@ -27,4 +31,19 @@ export const searchUsers = async (search: string): Promise<AuthUser[]> => {
     console.log("Fetched users: ", data)
     const list = data?.data ?? (Array.isArray(data) ? data : [])
     return list as AuthUser[]
+}
+
+
+
+export const deleteUserAccount = async (): Promise<any | null> => {
+    if (!getBaseUrl()) return null
+
+    const response = await makeApiRequest(getBaseUrl(), `/account/delete/`, {
+        method: 'DELETE',
+        withToken: true,
+    })
+
+    const data = await response?.json().catch(() => null)
+    if (!response?.ok) return null
+    return (data?.data ?? data) as any
 }

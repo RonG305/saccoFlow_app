@@ -29,8 +29,6 @@ import { getOrganizations } from "@/data/organization/organization";
 import { loginUser } from "@/actions/auth";
 import type { Organization } from "@/types/organization";
 import { Icon } from "@iconify/react";
-import { decodeToken } from "@/lib/decode-token";
-import type { UserData } from "@/lib/user";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -53,7 +51,7 @@ export default function SigninPage() {
 
   useEffect(() => {
     getOrganizations({ limit: 20 }).then((res) => {
-      if (!("error" in res)) setOrganizations(res.data);
+      if (!("error" in res)) setOrganizations([]);
     });
   }, []);
 
@@ -76,9 +74,14 @@ export default function SigninPage() {
         setError(result.error);
         return;
       }
-      const decoded = decodeToken<UserData>(result.accessToken);
-      const destination = decoded?.roles?.includes("driver") ? "/courier/home" : "/home";
-      navigate(destination, { replace: true });
+      navigate('/otp', {
+        replace: true,
+        state: {
+          email: values.email,
+          password: values.password,
+          organization_id: values.organization_id,
+        },
+      });
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {

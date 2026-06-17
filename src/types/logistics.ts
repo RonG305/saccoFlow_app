@@ -136,6 +136,10 @@ export interface UpdateTripStatusInput {
   distance_km?: number;
   fuel_used_liters?: number;
   notes?: string;
+  origin_lat?: number;
+  origin_lng?: number;
+  destination_lat?: number;
+  destination_lng?: number;
 }
 
 export interface ReportIncidentInput {

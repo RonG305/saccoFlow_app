@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { ShareCard } from '@/components/shares/ShareCard'
 import { getMemberShareAccount } from '@/data/organization/shares'
 import type { ShareAccount } from '@/types/shares'
+import { getUserProfile, getMemberId } from '@/utils/storage'
 
 const quickActions = [
   { label: 'Buy Shares', icon: TrendingUp, to: '/shares' },
@@ -19,14 +20,14 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const memberId = localStorage.getItem('member_id')
+    const memberId = getMemberId()
     if (!memberId) { setLoading(false); return }
     getMemberShareAccount(memberId)
       .then(setAccount)
       .finally(() => setLoading(false))
   }, [])
 
-  const profile = JSON.parse(localStorage.getItem('member_profile') || 'null')
+  const profile = getUserProfile()
   const firstName = profile?.first_name ?? 'Member'
 
   return (

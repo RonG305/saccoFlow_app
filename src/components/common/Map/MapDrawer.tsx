@@ -40,9 +40,7 @@ const MapDrawer = ({
   latitude,
   longitude,
   title,
-  zoom = 15,
   name = "geo_coordinates",
-  defaultValue,
 }: MapViewProps) => {
   const position: [number, number] = [latitude, longitude];
   const inputRef = useRef<HTMLInputElement>(null);

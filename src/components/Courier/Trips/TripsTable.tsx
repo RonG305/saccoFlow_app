@@ -5,7 +5,6 @@ import { DataTable } from "@/components/common/DataTable/DataTable";
 import { ActionDropdown } from "@/components/common/ActionDropdown";
 import {
   DropdownMenuItem,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import TripStatusBadge from "./TripStatusBadge";
 import type { Trip } from "@/types/logistics";
@@ -23,8 +22,8 @@ export default function TripsTable({
   trips,
   toolbar,
   onView,
-  onUpdateStatus,
-  onReportIncident,
+  // onUpdateStatus,
+  // onReportIncident,
 }: Props) {
   const columns: ColumnDef<Trip>[] = [
     {
@@ -69,7 +68,7 @@ export default function TripsTable({
       id: "actions",
       cell: ({ row }) => {
         const trip = row.original;
-        const canAct = trip.status !== "completed" && trip.status !== "cancelled";
+        // const canAct = trip.status !== "completed" && trip.status !== "cancelled";
         return (
           <ActionDropdown>
             <DropdownMenuItem onClick={() => onView(trip)}>

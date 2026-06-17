@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { logoutUser } from '@/actions/auth'
+import { getUserProfile, getMemberNumber } from '@/utils/storage'
 
 interface SettingItem {
   label: string
@@ -17,18 +18,18 @@ interface SettingItem {
 
 export default function AccountPage() {
   const navigate = useNavigate()
-  const profile = JSON.parse(localStorage.getItem('member_profile') || 'null')
-  const memberNumber = localStorage.getItem('member_number') ?? '—'
+  const profile = getUserProfile()
+  const memberNumber = getMemberNumber() ?? '—'
 
   const name = profile
     ? [profile.first_name, profile.last_name].filter(Boolean).join(' ')
     : 'Member'
-  const email = profile?.user?.email ?? '—'
+  const email = profile?.email ?? '—'
   const phone = profile?.phone_number ?? '—'
   const initials = name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
 
   const settings: SettingItem[] = [
-    { label: 'Privacy & Security', icon: Shield },
+    { label: 'Privacy & Security', icon: Shield, action: () => navigate('/account/security') },
     { label: 'Notifications', icon: Bell },
     { label: 'Help & Support', icon: HelpCircle },
     {
@@ -64,7 +65,7 @@ export default function AccountPage() {
             <div className="flex items-center gap-2">
               <p className="font-bold truncate">{name}</p>
               <Badge variant="secondary" className="text-xs shrink-0">
-                {profile?.user?.account_type ?? 'Member'}
+                {profile?.account_type ?? 'Member'}
               </Badge>
             </div>
             <p className="text-sm text-muted-foreground truncate">{email}</p>
@@ -94,7 +95,7 @@ export default function AccountPage() {
         {[
           { label: 'City', value: profile?.city ?? '—' },
           { label: 'Country', value: profile?.country ?? '—' },
-          { label: 'Status', value: profile?.user?.status ?? '—' },
+          { label: 'Status', value: profile?.status ?? '—' },
         ].map(({ label, value }) => (
           <div key={label} className="py-3 px-2">
             <p className="text-xs text-muted-foreground">{label}</p>

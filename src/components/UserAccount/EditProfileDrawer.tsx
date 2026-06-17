@@ -71,7 +71,9 @@ export default function EditProfileDrawer({ open, profile, onClose, onSuccess }:
         last_name: profile.last_name ?? "",
         middle_name: profile.middle_name ?? "",
         gender: profile.gender ?? "",
-        date_of_birth: profile.date_of_birth ?? "",
+        date_of_birth: profile.date_of_birth
+          ? profile.date_of_birth.split("T")[0]
+          : "",
         bio: profile.bio ?? "",
       });
     }
@@ -89,7 +91,13 @@ export default function EditProfileDrawer({ open, profile, onClose, onSuccess }:
       form.setError("root", { message: "Session expired. Please sign in again." });
       return;
     }
-    const result = await updateUser(id, values);
+    const payload = {
+      ...values,
+      date_of_birth: values.date_of_birth
+        ? new Date(values.date_of_birth).toISOString()
+        : undefined,
+    };
+    const result = await updateUser(id, payload);
     if (result?.error) {
       form.setError("root", { message: result.error });
       return;
@@ -128,7 +136,11 @@ export default function EditProfileDrawer({ open, profile, onClose, onSuccess }:
               label="Gender"
               value={profile?.gender ? profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1) : undefined}
             />
-            <InfoRow icon="solar:calendar-bold" label="Date of birth" value={profile?.date_of_birth} />
+            <InfoRow
+              icon="solar:calendar-bold"
+              label="Date of birth"
+              value={profile?.date_of_birth ? new Date(profile.date_of_birth).toLocaleDateString() : undefined}
+            />
             <InfoRow icon="solar:document-text-bold" label="Bio" value={profile?.bio} />
           </div>
         )}

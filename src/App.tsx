@@ -31,7 +31,6 @@ export default function App() {
             <Route path="/shares" element={<SharesPage />} />
             <Route path="/loans" element={<LoansPage />} />
             <Route path="/account" element={<AccountPage />} />
-            <Route path="/account/security" element={<PrivacySecurityPage />} />
           </Route>
 
           {/* Driver / Courier UI */}
@@ -39,8 +38,11 @@ export default function App() {
             <Route path="/courier/home" element={<CourierHome />} />
             <Route path="/courier/trips" element={<CourierTrips />} />
             <Route path="/courier/map" element={<CourierMap />} />
-            <Route path="/account/security" element={<PrivacySecurityPage />} />
+            <Route path="/courier/account" element={<CourierAccount />} />
           </Route>
+
+          {/* Shared full-screen pages (own header, no bottom nav) */}
+          <Route path="/account/security" element={<PrivacySecurityPage />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -101,8 +101,8 @@ export function TripTimeSeriesChart({ driverId }: { driverId: string }) {
             No data for this period
           </div>
         ) : (
-          <ChartContainer config={chartConfig} className="h-44 w-full">
-            <BarChart data={chartPoints} barCategoryGap="35%">
+          <ChartContainer config={chartConfig} className="h-52 w-full">
+            <BarChart data={chartPoints} barCategoryGap="8%" barSize={10}>
               <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis
                 dataKey="label"
@@ -124,7 +124,7 @@ export function TripTimeSeriesChart({ driverId }: { driverId: string }) {
                 cursor={{ fill: "var(--muted)", opacity: 0.4 }}
                 content={<ChartTooltipContent indicator="dashed" />}
               />
-              <Bar dataKey="value" fill="var(--color-value)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="var(--color-value)" radius={[3, 3, 0, 0]} />
             </BarChart>
           </ChartContainer>
         )}

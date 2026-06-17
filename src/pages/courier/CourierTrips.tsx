@@ -71,7 +71,7 @@ export default function CourierTrips() {
 
   return (
     <div className="flex flex-col gap-4 pt-4">
-      <Card className="overflow-hidden">
+      <div className="overflow-hidden bg-card">
         <div className="flex border-b">
           {(["trips", "fuel"] as const).map((tab) => (
             <button
@@ -94,7 +94,7 @@ export default function CourierTrips() {
         ) : (
           <FuelConsumptionTimeSeriesChart driverId={driverId} />
         )}
-      </Card>
+      </div>
       <h1 className="text-xl font-bold">Deliveries</h1>
       <Card>
         <TripsTable

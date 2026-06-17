@@ -95,13 +95,13 @@ export function FuelConsumptionTimeSeriesChart({ driverId }: { driverId: string 
 
       <CardContent className="pb-2">
         {loading ? (
-          <Skeleton className="h-44 w-full rounded-lg" />
+          <Skeleton className="h-52 w-full rounded-lg" />
         ) : chartPoints.length === 0 ? (
-          <div className="flex h-44 items-center justify-center text-sm text-muted-foreground">
+          <div className="flex h-52 items-center justify-center text-sm text-muted-foreground">
             No data for this period
           </div>
         ) : (
-          <ChartContainer config={chartConfig} className="h-44 w-full">
+          <ChartContainer config={chartConfig} className="h-52 w-full">
             <AreaChart data={chartPoints} margin={{ top: 6, right: 4, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="fillFuel" x1="0" y1="0" x2="0" y2="1">

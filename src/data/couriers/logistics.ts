@@ -138,3 +138,31 @@ export const getCurrentLocation = async (tripId: string) => {
   );
   return response?.json();
 };
+
+export const getDriverTripTimeSeries = async (
+  driverId: string,
+  period: "daily" | "weekly" | "monthly" | "yearly",
+  params: Record<string, string> = {},
+) => {
+  const qs = new URLSearchParams(params).toString();
+  const response = await makeApiRequest(
+    BASE,
+    `/drivers/${driverId}/stats/trips/${period}${qs ? `?${qs}` : ""}`,
+    { method: "GET", withToken: true },
+  );
+  return response?.json();
+};
+
+export const getDriverFuelTimeSeries = async (
+  driverId: string,
+  period: "daily" | "weekly" | "monthly" | "yearly",
+  params: Record<string, string> = {},
+) => {
+  const qs = new URLSearchParams(params).toString();
+  const response = await makeApiRequest(
+    BASE,
+    `/drivers/${driverId}/stats/fuel/${period}${qs ? `?${qs}` : ""}`,
+    { method: "GET", withToken: true },
+  );
+  return response?.json();
+};

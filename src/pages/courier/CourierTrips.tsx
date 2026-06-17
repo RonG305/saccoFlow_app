@@ -11,6 +11,8 @@ import { getTrips } from "@/data/couriers/logistics";
 import { getUser } from "@/lib/user";
 import type { Trip, TripStatus } from "@/types/logistics";
 import { Card } from "@/components/ui/card";
+import { TripTimeSeriesChart } from "@/components/Courier/Dashboard/StatCharts/TripTimeSeriesChart";
+import { FuelConsumptionTimeSeriesChart } from "@/components/Courier/Dashboard/StatCharts/FuelConsumptionTimeSeriesChart";
 
 const STATUS_TABS: { value: string; label: string }[] = [
   { value: "", label: "All" },
@@ -29,6 +31,7 @@ export default function CourierTrips() {
   const [incidentTrip, setIncidentTrip] = useState<Trip | null>(null);
   const [locationTrip, setLocationTrip] = useState<Trip | null>(null);
   const [showSchedule, setShowSchedule] = useState(false);
+  const [chartTab, setChartTab] = useState<"trips" | "fuel">("trips");
 
   const fetchTrips = useCallback(async () => {
     if (!user?.sub) return;
@@ -64,8 +67,34 @@ export default function CourierTrips() {
     </div>
   );
 
+  const driverId = user?.sub ?? "";
+
   return (
     <div className="flex flex-col gap-4 pt-4">
+      <Card className="overflow-hidden">
+        <div className="flex border-b">
+          {(["trips", "fuel"] as const).map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setChartTab(tab)}
+              className={[
+                "flex-1 py-2.5 text-sm font-medium transition-colors",
+                chartTab === tab
+                  ? "border-b-2 border-primary text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
+              ].join(" ")}
+            >
+              {tab === "trips" ? "Trips" : "Fuel"}
+            </button>
+          ))}
+        </div>
+        {chartTab === "trips" ? (
+          <TripTimeSeriesChart driverId={driverId} />
+        ) : (
+          <FuelConsumptionTimeSeriesChart driverId={driverId} />
+        )}
+      </Card>
       <h1 className="text-xl font-bold">Deliveries</h1>
       <Card>
         <TripsTable

@@ -319,6 +319,8 @@
               "type": "string",
               "enum": [
                 "scheduled",
+                "accepted",
+                "rejected",
                 "in_progress",
                 "completed",
                 "cancelled"
@@ -1371,12 +1373,42 @@
           "status": {
             "enum": [
               "scheduled",
+              "accepted",
+              "rejected",
               "in_progress",
               "completed",
               "cancelled"
             ],
             "type": "string",
             "example": "in_progress"
+          },
+          "origin_lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "example": -0.7167,
+            "description": "Driver current latitude — supply when marking in_progress"
+          },
+          "origin_lng": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "example": 36.4333,
+            "description": "Driver current longitude — supply when marking in_progress"
+          },
+          "destination_lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "example": -0.3031,
+            "description": "Driver current latitude — supply when marking completed"
+          },
+          "destination_lng": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "example": 36.08,
+            "description": "Driver current longitude — supply when marking completed"
           },
           "distance_km": {
             "type": "number",
